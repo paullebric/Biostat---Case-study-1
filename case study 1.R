@@ -38,16 +38,17 @@ spec0; check_1; check_2
 
 
 #IV) TWO-LEVEL COMPARISONS (at least two)
-test_1 <- t.test(Data$Response ~ sub, Data = subset(Data, Timepoint == "T1"))
-test_2 <- ??(?? ~ ??, ??a = subset(??, ?? == "??"))
+test_1 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T1", "T2")))                                                     
+test_2 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T3", "T4"))) 
 test_1; test_2
 
 TukeyHSD(spec0)
 
 #V)MULTI-LEVEL COMPARISONS
 
-test_multi <- ??(?? ~ ??, ??a = ??)
+test_multi <- aov(Response ~ Group, data = Data)
 test_multi
+
 #VI)REGRESSION MODEL
 model <- ??(?? ~ ?? * ??, ??a = ??)
 model_out <- ??(model)
