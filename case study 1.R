@@ -15,7 +15,7 @@ All_Data <- list(
 #$$$1 Data Exploration
 lapply(All_Data,head)
 lapply(All_Data,dim)
-lapply(All_Data,sum(is.na))
+lapply(All_Data, function(x){str(x); head(x)})
 lapply(All_Data,str)
 
 
