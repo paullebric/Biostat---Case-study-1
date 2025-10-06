@@ -1,0 +1,36 @@
+ASSYMPTION CHECK / CTL :
+🧩 1️⃣ Résumé du modèle ANOVA (spec0)
+Response ~ Group * Timepoint
+
+
+2 facteurs : Group et Timepoint
+
+Interaction : Group:Timepoint
+
+Résidus : 451 degrés de liberté
+
+Erreur standard résiduelle : 5.73
+
+17 valeurs manquantes exclues automatiquement.
+
+➡️ Rien d’anormal ici, le modèle est bien spécifié.
+
+🧪 2️⃣ Test de normalité des résidus (Shapiro–Wilk)
+W = 0.99715, p-value = 0.6061
+
+
+Hypothèse nulle (H₀) : les résidus suivent une loi normale.
+
+p-value > 0.05 → ✅ on ne rejette pas H₀ → normalité des résidus acceptable.
+
+👉 Condition de normalité respectée.
+
+📊 3️⃣ Test d’homogénéité des variances (Bartlett)
+Bartlett's K-squared = 3.5198, df = 11, p-value = 0.9819
+
+
+Hypothèse nulle (H₀) : les variances sont homogènes entre les groupes.
+
+p-value > 0.05 → ✅ on ne rejette pas H₀ → variances égales.
+
+👉 Condition d’homoscédasticité respectée.

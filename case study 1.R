@@ -29,9 +29,10 @@ desc2 <- tapply(Data$Response, list(Data$Timepoint, Data$Group), function(x) c(n
 n_all; n_na; tab; desc1; desc2
 
 #III) ASSUMPTION CHECK / CTL
-spec0 <- ??(?? ~ ?? * ??, ??a = ??)
-check_1 <- ??(??)
-check_2 <- ??(?? ~ ??, ??a = ??)
+spec0 <- aov(Response ~ Group * Timepoint, data = Data)
+check_1 <- shapiro.test(residuals(spec0))
+check_2 <- bartlett.test(Response ~ interaction(Group, Timepoint), data = Data)
+
 spec0; check_1; check_2
 
 
