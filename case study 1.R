@@ -1,5 +1,6 @@
 library(ggplot2)
 library(readxl)
+library (car)
 
 Data <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Data")
 Summary <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Summary")
@@ -31,7 +32,7 @@ n_all; n_na; tab; desc1; desc2
 #III) ASSUMPTION CHECK / CTL
 spec0 <- aov(Response ~ Group * Timepoint, data = Data)
 check_1 <- shapiro.test(residuals(spec0))
-check_2 <- bartlett.test(Response ~ interaction(Group, Timepoint), data = Data)
+check_2 <- leveneTest(Response ~ interaction(Group, Timepoint), data = Data)
 
 spec0; check_1; check_2
 
