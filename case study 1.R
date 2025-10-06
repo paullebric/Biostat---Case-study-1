@@ -20,11 +20,11 @@ lapply(All_Data,dim)
 lapply(All_Data, function(x){str(x); head(x)})
 lapply(All_Data,str)
 n_all <- nrow(Data)
-n_na <- sum(is.na(??$??))
-tab <- with(??, table(??, ??))
-desc1 <- tapply(??$??, list(??$??), function(x) c(n=length(x),
+n_na <- sum(is.na(Data$Response))
+tab <- with(Data, table(Group, Timepoint))
+desc1 <- tapply(Data$Response, Data$Group, function(x) c(n=length(x),
                                                   mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
-desc2 <- tapply(??$??, list(??$??, ??$??), function(x) c(n=length(x),
+desc2 <- tapply(Data$Response, list(Data$Timepoint, Data$Group), function(x) c(n=length(x),
                                                          mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
 n_all; n_na; tab; desc1; desc2
 
