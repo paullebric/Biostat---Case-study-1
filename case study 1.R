@@ -37,9 +37,11 @@ spec0; check_1; check_2
 
 
 #IV) TWO-LEVEL COMPARISONS (at least two)
-test_1 <- (?? ~ ??, ??a = subset(??, ?? == "??"))
+test_1 <- t.test(Data$Response ~ sub, Data = subset(Data, Timepoint == "T1"))
 test_2 <- ??(?? ~ ??, ??a = subset(??, ?? == "??"))
 test_1; test_2
+
+TukeyHSD(spec0)
 
 #V)MULTI-LEVEL COMPARISONS
 
