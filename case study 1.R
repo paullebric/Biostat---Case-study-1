@@ -41,30 +41,43 @@ spec0; check_1; check_2
 test_1 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T1", "T2")))                                                     
 test_2 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T3", "T4"))) 
 test_1; test_2
+#ici ca sert a rien mais bon on doit le faire
 
-TukeyHSD(spec0)
 
 #V)MULTI-LEVEL COMPARISONS
 
-test_multi <- aov(Response ~ Group, data = Data)
+test_multi <- aov(Response ~ Group * Timepoint, data = Data)
 test_multi
+summary(test_multi)
+"""
+on voit qu'il y a un effet hautement significatif du groupe sur la reponses mais
+aussi du timepoint sur la reponse et aussi de l'interaction timepoint*group sur la reponse
+"""
 
 #VI)REGRESSION MODEL
-model <- ??(?? ~ ?? * ??, ??a = ??)
-model_out <- ??(model)
+model <- lm(Response ~ Group * Timepoint, data = Data)
+model_out <- summary(model)
 model; model_out
 
 
+# Ici on regarde la difference des group des timepoint et des group+timepoint par rapport au 
+# groupe A Timepoint 1.
+# En résumé on voit que les groupes B et C on un coeff de + 7 et + 9 par rapport au gr A T1
+
+
 #VI) POST-HOC ANALYSIS
-posthoc <- ??(??)
+posthoc <- TukeyHSD(test_multi)
 posthoc
 
+
+#ici on commence a rentrer dans le vif du sujet on compare 2 à 2 chacun des gr timepoint. Ce qui nous donne des informations interressantes.
+
 #VII) P-value matrix and comparison visual
-p_1 <- ??
-  p_2 <- ??
-  p_multi <- ??
-  p_model <- ??
-  p_mat <- matrix(c(p_two_1, p_two_2, p_multi, p_model), nrow=1)
+p_1 <- test_1
+  p_2 <- test_2
+  p_multi <- test_multi
+  p_model <- model_out
+  p_mat <- matrix(c(p_1, p_2, p_multi, p_model), nrow=1)
 colnames(p_mat) <- c("two_1","two_2","multi","model")
 rownames(p_mat) <- "p"
 p_mat
