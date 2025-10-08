@@ -10,7 +10,7 @@ Info <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Info"
 Codebook <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Codebook")
 
 #---------------------------------------------------------------------------------------
-# this code was build with the help of the entire group using a github repository and 
+# this code was built with the help of the entire group using a github repository and 
 # github desktop.
 # The git repository is available at : https://github.com/paullebric/Biostat---Case-study-1
 #---------------------------------------------------------------------------------------
@@ -39,12 +39,12 @@ n_all <- nrow(Data)
 n_na <- sum(is.na(Data$Response))
 tab <- with(Data, table(Group, Timepoint))
 desc1 <- tapply(Data$Response, Data$Group, function(x) c(n=length(x),
-                                                  mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
-desc2 <- tapply(Data$Response, list(Data$Timepoint, Data$Group), function(x) c(n=length(x),
                                                          mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
+desc2 <- tapply(Data$Response, list(Data$Timepoint, Data$Group), function(x) c(n=length(x),
+                                                                               mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
 n_all; n_na; tab; desc1; desc2
 #=======================================================================================
-#III) ASSUMPTION CHECK / CTL
+#III) ASSUMPTION CHECK / CLT
 #=======================================================================================
 spec0 <- aov(Response ~ Group * Timepoint, data = Data)
 check_1 <- shapiro.test(residuals(spec0))
@@ -90,8 +90,8 @@ emm_all <- as.data.frame(emmeans(model, ~ Group * Timepoint))
 ggplot(emm_all, aes(Timepoint, emmean, color = Group, group = Group)) +
   geom_line() + geom_point(size = 2.5) +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = .1) +
-  labs(y = "Moyenne ajustée (IC95%)",
-       title = "Évolution de Response par Groupe (estimations du modèle)") +
+  labs(y = "Adjusted mean (95% CI)",
+       title = "Evolution of Response by Group (model estimates)") +
   theme_minimal()
 
 #Here we start to get to the heart of the matter, comparing each of the gr
@@ -102,10 +102,10 @@ ggplot(emm_all, aes(Timepoint, emmean, color = Group, group = Group)) +
 #=======================================================================================
 f <- model_out$fstatistic
 p_1 <- test_1$p.value
-  p_2 <- test_2$p.value
-  p_multi <- summary(test_multi)[[1]]["Group:Timepoint", "Pr(>F)"]
-  p_model <- pf(f[1], f[2], f[3], lower.tail = FALSE)
-  p_mat <- matrix(c(p_1, p_2, p_multi, p_model), nrow=1)
+p_2 <- test_2$p.value
+p_multi <- summary(test_multi)[[1]]["Group:Timepoint", "Pr(>F)"]
+p_model <- pf(f[1], f[2], f[3], lower.tail = FALSE)
+p_mat <- matrix(c(p_1, p_2, p_multi, p_model), nrow=1)
 colnames(p_mat) <- c("two_1","two_2","multi","model")
 rownames(p_mat) <- "p"
 p_mat
@@ -128,7 +128,7 @@ ggplot(Data, aes(x = Timepoint, y = Response, fill = Timepoint)) +
   geom_boxplot(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Timepoint",
+    title = "Distribution of Response according to Timepoint",
     x = "Timepoint",
     y = "Response"
   ) +
@@ -138,8 +138,8 @@ ggplot(Data, aes(x = Group, y = Response, fill = Group)) +
   geom_boxplot(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Gr",
-    x = "Groupe",
+    title = "Distribution of Response according to Group",
+    x = "Group",
     y = "Response"
   ) +
   theme_minimal()
@@ -148,23 +148,23 @@ ggplot(Data, aes(x = Group, y = Response, fill = Timepoint)) +
   geom_boxplot(alpha = 0.8, outlier.size = 1) +
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Gr et le Timepoint",
-    x = "Groupe",
+    title = "Distribution of Response according to Group and Timepoint",
+    x = "Group",
     y = "Response"
   ) +
   theme_minimal()
-#Les points gris sont les valeurs aberrantes (outlier)
+#The gray points are the outlier values (outlier)
 
 
 #=======================================================================================
-#IX) VIOLON PLOT
+#IX) VIOLIN PLOT
 #=======================================================================================
 
 ggplot(Data, aes(x = Timepoint, y = Response, fill = Timepoint)) +
   geom_violin(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Timepoint",
+    title = "Distribution of Response according to Timepoint",
     x = "Timepoint",
     y = "Response"
   ) +
@@ -174,8 +174,8 @@ ggplot(Data, aes(x = Group, y = Response, fill = Group)) +
   geom_violin(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Gr",
-    x = "Groupe",
+    title = "Distribution of Response according to Group",
+    x = "Group",
     y = "Response"
   ) +
   theme_minimal()
@@ -185,8 +185,8 @@ ggplot(Data, aes(x = Group, y = Response, fill = Timepoint)) +
   stat_summary(aes(group = Timepoint), FUN = mean, color = "black",geom = "point", size = 2 ,position = position_dodge(width = 0.8))+
   theme_minimal() +
   labs(
-    title = "Distribution de la Response selon le Gr et le Timepoint",
-    x = "Groupe",
+    title = "Distribution of Response according to Group and Timepoint",
+    x = "Group",
     y = "Response"
   ) +
   theme_minimal()
@@ -209,7 +209,7 @@ ggplot(summary_data, aes(x = Timepoint, y = mean, color = Group, group = Group))
   geom_point(size = 3) +
   geom_line() +
   geom_errorbar(aes(ymin = lo, ymax = hi), width = 0.1) +
-  labs(y = "Mean ± 95% CI", title = "Moyennes et intervalles de confiance") +
+  labs(y = "Mean ± 95% CI", title = "Means and confidence intervals") +
   theme_minimal()
 
 #=======================================================================================
@@ -218,25 +218,35 @@ ggplot(summary_data, aes(x = Timepoint, y = mean, color = Group, group = Group))
 Data_clean <- na.omit(Data)
 model_view <- data.frame(
   Observed = Data_clean$Response,
-  Predicted = fitted(model)
+  Predicted = fitted(model),
+  Timepoint = Data_clean$Timepoint,
+  Group = Data_clean$Group,
+  Residuals = resid(model)
 )
 #Missing data needs to be cleaned before doing this graph because for each predicted 
 #response we need an observed response
 
 ggplot(model_view, aes(x = Observed, y = Predicted)) +
-  geom_point(color = "steelblue", alpha = 0.6, size = 2) +  # nuage de points
-  geom_abline(intercept = 0, slope = 1,                     # diagonale y = x
+  geom_point(color = "steelblue", alpha = 0.6, size = 2) +  # scatter plot
+  geom_abline(intercept = 0, slope = 1,                     # diagonal y = x
               color = "red", linetype = "dashed", alpha = 0.6, linewidth = 1.2) +
   labs(
-    title = "Valeurs observées vs prédictions du modèle",
-    x = "Valeurs observées (Response)",
-    y = "Valeurs prédites (fitted)"
+    title = "Observed values vs model predictions",
+    x = "Observed values (Response)",
+    y = "Predicted values (fitted)"
   )+
   theme_minimal()
 
-#Here we look at how the model predict the responses compared to the responses.
+#Here we look at how the model predicts the responses compared to the observed responses.
 # In red there is the diagonal and as we can see the predicted and observed 
-# responses follow this diagonal wich means that the model is working
+# responses follow this diagonal which means that the model is working well
+
+# but the model only predict the mean value for each group and timepoint so all observed 
+# response for one group at one timepoint is the same that is why we see lines. The model
+# does not take in account interindividual variability because it cannot explain this variability.
+
+
+
 
 #=======================================================================================
 #XII) CONCLUSION
@@ -254,14 +264,4 @@ ggplot(model_view, aes(x = Observed, y = Predicted)) +
 # 
 # The Central Limit Theorem (CLT) supported using parametric tests because our sample size was large and data were roughly normal with equal variances.
 # So, the regression model gave consistent and reliable results with the simpler tests.
-
-
-
-
-
-
-
-
-
-
 
