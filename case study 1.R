@@ -58,8 +58,7 @@ spec0; check_1; check_2
 test_1 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T1", "T2")))                                                     
 test_2 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T3", "T4"))) 
 test_1; test_2
-#ici ca sert a rien mais bon on doit le faire on compare T1 et T2 puis T3 et T4
-
+#here it's useless but hey we have to do it we compare T1 and T2 then T3 and T4
 #=======================================================================================
 #V)MULTI-LEVEL COMPARISONS
 #=======================================================================================
@@ -68,9 +67,8 @@ test_multi <- aov(Response ~ Group * Timepoint, data = Data)
 test_multi
 summary(test_multi)
 
-# on voit qu'il y a un effet hautement significatif du groupe sur la reponses mais
-# aussi du timepoint sur la reponse et aussi de l'interaction timepoint*group sur la reponse
-
+# we see that there is a highly significant effect of the group on the response, but
+# also of the timepoint on the response, and also of the timepoint*group interaction on the response.
 #=======================================================================================
 #VI)REGRESSION MODEL
 #=======================================================================================
@@ -79,16 +77,15 @@ model_out <- summary(model)
 model; model_out
 
 
-# Ici on regarde la difference des group des timepoint et des group+timepoint par rapport 
-# au groupe A Timepoint 1.
-# En résumé on voit que les groupes B et C on un coeff de + 7 et + 9 par rapport au gr A T1
-
+# Here we look at the difference between the timepoint groups and the timepoint groups compared to
+# group A Timepoint 1.
+# In summary, we see that groups B and C have a coefficient of +7 and +9 compared to group A T1
 #=======================================================================================
 #VII) POST-HOC ANALYSIS
 #=======================================================================================
 posthoc <- TukeyHSD(test_multi)
 posthoc
-#Graphique qui resume les resultats du turkeyHSD pas demandé
+#Graph summarizing the results of the turkeyHSD not requested
 emm_all <- as.data.frame(emmeans(model, ~ Group * Timepoint))
 ggplot(emm_all, aes(Timepoint, emmean, color = Group, group = Group)) +
   geom_line() + geom_point(size = 2.5) +
@@ -97,8 +94,9 @@ ggplot(emm_all, aes(Timepoint, emmean, color = Group, group = Group)) +
        title = "Évolution de Response par Groupe (estimations du modèle)") +
   theme_minimal()
 
-#ici on commence a rentrer dans le vif du sujet on compare 2 à 2 chacun des gr 
-#timepoint. Ce qui nous donne des informations interressantes.
+#Here we start to get to the heart of the matter, comparing each of the gr
+#timepoints two by two. This gives us some interesting information.
+
 #=======================================================================================
 #VIII) P-value matrix and comparison visual
 #=======================================================================================
@@ -112,8 +110,10 @@ colnames(p_mat) <- c("two_1","two_2","multi","model")
 rownames(p_mat) <- "p"
 p_mat
 barplot(-log10(p_mat), beside=TRUE, ylab="-log10(p)")
-# ici sur ce graph on voit les differentes pvalue (-log10) plus la barre est haute plus 
-# c'est significatif on voit donc que plus on fait un test avancé plus c'est significatif
+
+# Here on this graph we see the different p-values (-log10). The higher the bar, the more significant
+# It is, so we see that the more advanced the test, the more significant it is.
+
 image(t(-log10(p_mat)), axes=FALSE)
 axis(1, at=seq(0,1,length.out=ncol(p_mat)), labels=colnames(p_mat))
 axis(2, at=0.5, labels=rownames(p_mat))
