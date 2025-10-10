@@ -54,15 +54,37 @@ ggplot(Data, aes(x = "", y = Response)) +
 #=======================================================================================
 #III) ASSUMPTION CHECK / CLT
 #=======================================================================================
+
+#Normality check for each Timepoint, each Group and each Timepoint x Group
+shapiro_results_all<- shapiro.test(Data$Response)
+shapiro_results_timepoint <- by(Data$Response, Data$Timepoint, shapiro.test)
+shapiro_results_group <- by(Data$Response, Data$Group, shapiro.test)
+shapiro_results_mixed <- by(Data$Response, list(Data$Group, Data$Timepoint), shapiro.test)
+shapiro_results_mixed
+shapiro_results_all
+shapiro_results_group
+shapiro_results_timepoint
+
+ggplot(Data, aes(x = Response, fill = Group)) +
+  geom_histogram() +
+  facet_wrap(~ Group * Timepoint) +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Response by Group and Timepoint",
+    x = "Response",
+    y = "Count"
+  )
+
 spec0 <- aov(Response ~ Group * Timepoint, data = Data)
-check_1 <- shapiro.test(residuals(spec0))
 check_2 <- leveneTest(Response ~ interaction(Group, Timepoint), data = Data)
 
-spec0; check_1; check_2
+spec0; check_2
 
 #=======================================================================================
 #IV) TWO-LEVEL COMPARISONS (at least two)
 #=======================================================================================
+levene_check <- leveneTest(Response ~ Timepoint,data = Data)
+levene_check
 test_1 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T1", "T2")))                                                     
 test_2 <- t.test(Response ~ Timepoint, data = subset(Data, Timepoint %in% c("T3", "T4"))) 
 test_1; test_2
@@ -161,6 +183,7 @@ ggplot(Data, aes(x = Group, y = Response, fill = Timepoint)) +
 ggplot(Data, aes(x = Timepoint, y = Response, fill = Timepoint)) +
   geom_violin(alpha = 0.8) +
   theme_minimal() +
+  stat_summary(fun = median, geom = "point", color = "black", size = 2.5)+
   labs(
     title = "Distribution of Response according to Timepoint",
     x = "Timepoint",
@@ -170,6 +193,7 @@ ggplot(Data, aes(x = Timepoint, y = Response, fill = Timepoint)) +
 
 ggplot(Data, aes(x = Group, y = Response, fill = Group)) +
   geom_violin(alpha = 0.8) +
+  stat_summary(fun = median, geom = "point", color = "black", size = 2.5)+
   theme_minimal() +
   labs(
     title = "Distribution of Response according to Group",
@@ -180,7 +204,7 @@ ggplot(Data, aes(x = Group, y = Response, fill = Group)) +
 
 ggplot(Data, aes(x = Group, y = Response, fill = Timepoint)) +
   geom_violin(alpha = 0.8,position = position_dodge(width = 0.8)) +
-  stat_summary(aes(group = Timepoint), FUN = mean, color = "black",geom = "point", size = 2 ,position = position_dodge(width = 0.8))+
+  stat_summary(aes(group = Timepoint), FUN = median, color = "black",geom = "point", size = 2 ,position = position_dodge(width = 0.8))+
   theme_minimal() +
   labs(
     title = "Distribution of Response according to Group and Timepoint",
