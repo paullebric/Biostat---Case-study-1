@@ -1,7 +1,5 @@
 library(ggplot2)
 library(readxl)
-library (car)
-library(emmeans)
 library(dplyr)
 
 Data <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Data")
@@ -42,6 +40,16 @@ desc1 <- tapply(Data$Response, Data$Group, function(x) c(n=length(x),
 desc2 <- tapply(Data$Response, list(Data$Timepoint, Data$Group), function(x) c(n=length(x),
                                                                                mean=mean(x,na.rm=TRUE), sd=sd(x,na.rm=TRUE)))
 n_all; n_na; tab; desc1; desc2
+
+ggplot(Data, aes(x = "", y = Response)) +
+  geom_violin(fill = "skyblue", color = "gray20", alpha = 0.7) +
+  geom_boxplot(width = 0.1, fill = "white", outlier.shape = NA, alpha = 0.6) +
+  theme_minimal() +
+  labs(
+    title = "Overall distribution of Response values",
+    x = "",
+    y = "Response"
+  )
 #=======================================================================================
 #III) ASSUMPTION CHECK / CLT
 #=======================================================================================
