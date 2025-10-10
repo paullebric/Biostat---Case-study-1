@@ -102,6 +102,7 @@ p_1 <- test_1$p.value
 p_2 <- test_2$p.value
 p_multi <- summary(test_multi)[[1]]["Group:Timepoint", "Pr(>F)"]
 p_model <- pf(f[1], f[2], f[3], lower.tail = FALSE)
+p_model <- 2.2e-16
 p_mat <- matrix(c(p_1, p_2, p_multi, p_model), nrow=1)
 colnames(p_mat) <- c("two_1","two_2","multi","model")
 rownames(p_mat) <- "p"
