@@ -1,6 +1,7 @@
 library(ggplot2)
 library(readxl)
 library(dplyr)
+library(car)
 
 Data <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Data")
 Summary <- read_excel("Biostatistics 5A 1st Case Study dataset.xlsx",sheet = "Summary")
@@ -92,17 +93,6 @@ model; model_out
 #=======================================================================================
 posthoc <- TukeyHSD(test_multi)
 posthoc
-#Graph summarizing the results of the turkeyHSD not requested
-emm_all <- as.data.frame(emmeans(model, ~ Group * Timepoint))
-ggplot(emm_all, aes(Timepoint, emmean, color = Group, group = Group)) +
-  geom_line() + geom_point(size = 2.5) +
-  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = .1) +
-  labs(y = "Adjusted mean (95% CI)",
-       title = "Evolution of Response by Group (model estimates)") +
-  theme_minimal()
-
-#Here we start to get to the heart of the matter, comparing each of the gr
-#timepoints two by two. This gives us some interesting information.
 
 #=======================================================================================
 #VIII) P-value matrix and comparison visual
@@ -227,8 +217,7 @@ model_view <- data.frame(
   Observed = Data_clean$Response,
   Predicted = fitted(model),
   Timepoint = Data_clean$Timepoint,
-  Group = Data_clean$Group,
-  Residuals = resid(model)
+  Group = Data_clean$Group
 )
 #Missing data needs to be cleaned before doing this graph because for each predicted 
 #response we need an observed response
